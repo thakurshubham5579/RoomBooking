@@ -10,13 +10,11 @@ class Hotel extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'description', 'loction', 'manager_id'
+        'name',
+        'description',
+        'loction',
+        'manager_id',
     ];
-
-    public function manager()
-    {
-        return $this->belongsTo(User::class, 'manager_id');
-    }
 
     public function rooms()
     {
