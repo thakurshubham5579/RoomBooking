@@ -14,12 +14,11 @@ class IsAdmin
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+ public function handle($request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->role === 'admin'){
+        if (!Auth::check() || !Auth::user()->is_admin) {
+            abort(403, 'Unauthorized.');
+        }
         return $next($request);
     }
-
-    return redirect('/')->withError('Access denied. Admin only.');
-}
 }

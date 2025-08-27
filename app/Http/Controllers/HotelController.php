@@ -11,13 +11,13 @@ class HotelController extends Controller
     public function index()
     {
         $hotels = Hotel::with('rooms')->get();
-        return view('hotels.index', compact('hotel'));
+        return view('hotels.index', compact('hotels'));
     }
 
     public function show($id)
     {
         $hotels = Hotel::with('rooms')->findOrFail($id);
-        return view('hotels.show', compact('hotel'));
+        return view('hotels.show', compact('hotels'));
     }
 
     public function create()
