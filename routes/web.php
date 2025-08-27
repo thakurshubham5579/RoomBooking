@@ -69,17 +69,6 @@ Route::middleware(['auth'])->group(function () {
  
 
 });
-
-Route::middleware(['auth', IsAdmin::class])->prefix('admin')->group(function () {
-    
-
-    // Hotel CRUD
-    Route::resource('hotels', HotelController::class)->except(['index', 'show']);
-
-    // Room CRUD
-    Route::resource('rooms', RoomController::class)->except(['show']);
-});
-
 Route::middleware(['auth'])->group(function () {
 
     Route::get('/mybookings', [BookingController::class, 'myBookings'])->name('bookings.all');
