@@ -67,6 +67,7 @@ Route::middleware(['auth', IsAdmin::class])->prefix('admin')->group(function () 
 
 
 
+<<<<<<< HEAD
 
 
 
@@ -76,10 +77,27 @@ Route::middleware(['auth', IsAdmin::class])->prefix('admin')->group(function () 
 //});
 
 Route::post('/rooms', [RoomController::class, 'store'])->name('admin.rooms.store');
+=======
+});
+Route::middleware(['auth'])->group(function () {
+
+    Route::get('/mybookings', [BookingController::class, 'myBookings'])->name('bookings.all');
+
+});
+
+Route::get('/hotels', [HotelController::class, 'index'])->name('admin.hotels.index');
+Route::get('/rooms', [RoomController::class, 'index'])->name('admin.rooms.index');
+
+    Route::get('/hotels/create', [HotelController::class, 'create'])->name('admin.hotels.create');
+    Route::get('/rooms/create', [RoomController::class, 'create'])->name('admin.rooms.create');
+    Route::get('/hotels', [HotelController::class, 'index'])->name('hotels.index');
+        Route::post('/rooms', [RoomController::class, 'store'])->name('admin.rooms.store');
+>>>>>>> 7394923c4fd241450bdd021b61ee9140df668fc8
 
 
         
 
+<<<<<<< HEAD
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('hotels', HotelController::class);
@@ -95,3 +113,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 
 
+=======
+        
+>>>>>>> 7394923c4fd241450bdd021b61ee9140df668fc8
