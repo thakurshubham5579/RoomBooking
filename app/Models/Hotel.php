@@ -13,7 +13,7 @@ class Hotel extends Model
         'name',
         'description',
         'loction',
-        'manager_id',
+        
     ];
 
     public function rooms()

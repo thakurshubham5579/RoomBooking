@@ -8,10 +8,10 @@
 <body class="bg-gray-100">
 
     <nav class="bg-blue-600 text-white p-4 flex justify-between">
-        <a href="{{ route('hotels.index') }}" class="font-bold">Hotel Booking</a>
+        <a href="{{ route('public.hotels.index') }}" class="font-bold">Hotel Booking</a>
         <div>
             @auth
-                <a href="{{ route('bookings.my') }}" class="mr-4">My Bookings</a>
+                <a href="{{ route('public.booking.my_bookings') }}" class="mr-4">My Bookings</a>
                 <form action="{{ route('logout') }}" method="POST" class="inline">
                     @csrf
                     <button type="submit">Logout</button>

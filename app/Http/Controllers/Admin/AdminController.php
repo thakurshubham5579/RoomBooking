@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Hotel;
 use App\Models\Room;
 use App\Models\Booking;
@@ -52,10 +53,5 @@ class AdminController extends Controller
     /**
      * Show all bookings (for admin management).
      */
-    public function bookings()
-    {
-        $bookings = Booking::with(['room.hotel', 'user'])->latest()->paginate(10);
-        return view('bookings.all_bookings', compact('bookings'));
-    }
 }
 

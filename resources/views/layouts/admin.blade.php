@@ -12,7 +12,7 @@
         <div>
             <a href="{{ route('admin.dashboard') }}" class="mr-4">Dashboard</a>
             <a href="{{ route('admin.hotels.index') }}" class="mr-4">Hotels</a>
-            <a href="{{ route('bookings.all') }}" class="mr-4">Bookings</a>
+            <a href="{{ route('admin.bookings.index') }}" class="mr-4">Bookings</a>
             <form action="{{ route('logout') }}" method="POST" class="inline">
                 @csrf
                 <button type="submit">Logout</button>

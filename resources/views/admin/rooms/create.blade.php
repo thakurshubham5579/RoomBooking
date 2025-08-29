@@ -7,6 +7,7 @@
     <form method="POST" action="{{ route('admin.rooms.store') }}">
         @csrf
 
+        {{-- Select Hotel --}}
         <div class="mb-4">
             <label class="block font-semibold mb-2">Select Hotel</label>
             <select name="hotel_id" class="w-full border rounded px-3 py-2">
@@ -19,6 +20,7 @@
             @enderror
         </div>
 
+        {{-- Room Number --}}
         <div class="mb-4">
             <label class="block font-semibold mb-2">Room Number</label>
             <input type="text" name="room_number" value="{{ old('room_number') }}"
@@ -28,15 +30,22 @@
             @enderror
         </div>
 
+        {{-- Room Type (Dropdown) --}}
         <div class="mb-4">
             <label class="block font-semibold mb-2">Type</label>
-            <input type="text" name="type" value="{{ old('type') }}"
-                   class="w-full border rounded px-3 py-2">
+            <select name="type" class="w-full border rounded px-3 py-2">
+                <option value="Single" {{ old('type') == 'Single' ? 'selected' : '' }}>Single</option>
+                <option value="Double" {{ old('type') == 'Double' ? 'selected' : '' }}>Double</option>
+                <option value="Suite" {{ old('type') == 'Suite' ? 'selected' : '' }}>Suite</option>
+                <option value="Deluxe" {{ old('type') == 'Deluxe' ? 'selected' : '' }}>Deluxe</option>
+                <option value="Family" {{ old('type') == 'Family' ? 'selected' : '' }}>Family</option>
+            </select>
             @error('type') 
                 <p class="text-red-500 text-sm">{{ $message }}</p>
             @enderror
         </div>
 
+        {{-- Price --}}
         <div class="mb-4">
             <label class="block font-semibold mb-2">Price</label>
             <input type="number" step="0.01" name="price" value="{{ old('price') }}"
@@ -46,6 +55,7 @@
             @enderror
         </div>
 
+        {{-- Status --}}
         <div class="mb-4">
             <label class="block font-semibold mb-2">Status</label>
             <select name="status" class="w-full border rounded px-3 py-2">
@@ -57,6 +67,7 @@
             @enderror
         </div>
 
+        {{-- Description --}}
         <div class="mb-4">
             <label class="block font-semibold mb-2">Description</label>
             <textarea name="description" class="w-full border rounded px-3 py-2">{{ old('description') }}</textarea>
@@ -65,6 +76,7 @@
             @enderror
         </div>
 
+        {{-- Submit --}}
         <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
             Save Room
         </button>
