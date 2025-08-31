@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('type');
             $table->decimal('price',8,2);
             $table->enum('status',['available','booked'])->default('available');
+            $table->unique(['hotel_id', 'room_number']);
             $table->timestamps();
         });
     }

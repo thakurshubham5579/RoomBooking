@@ -4,115 +4,58 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Admin\HotelController;
-use App\Http\Controllers\Admin\RoomController;
-use App\Http\Controllers\Admin\BookingController;
+use App\Http\Controllers\Admin\HotelController as AdminHotelController;
+use App\Http\Controllers\Admin\RoomController as AdminRoomController;
+use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Admin\AdminController;
+
 use App\Http\Controllers\Public\HotelController as PublicHotelController;
+use App\Http\Controllers\Public\BookingController as PublicBookingController;
+use App\Http\Controllers\Public\UserController;
+
 use App\Http\Middleware\IsAdmin;
 
 // ================== Public Routes ================== //
-use App\Http\Controllers\Public\UserController;
-
-
-
 
 // Homepage
 Route::get('/', [UserController::class, 'home'])->name('home');
 
-// Hotels
+// Hotels (public)
 Route::prefix('/')->name('public.')->group(function () {
     Route::resource('hotels', PublicHotelController::class)->names('hotels');
 });
 
-// Rooms (user view only)
-Route::get('/rooms/{room}', [RoomController::class, 'show'])->name('rooms.show');
 
-
-
-//===============login Route ==============//
-Route::get('/login',[AuthController::class, 'loginForm'])->name('login');
+//=============== Login Routes ==============//
+Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
-Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-//===============Register Route ==============//
+//=============== Register Routes ==============//
 Route::get('/register', [AuthController::class, 'registerForm'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
 
-
-
+// ================== Public Booking Routes ================== //
+Route::prefix('public')->middleware('auth')->group(function () { 
+    Route::get('/my-bookings', [PublicBookingController::class, 'myBookings'])->name('public.bookings.my_bookings'); 
+    Route::post('/book-room/{room}', [PublicBookingController::class, 'bookRoom'])->name('public.bookings.book_room'); 
+    Route::delete('/my-bookings/{id}', [PublicBookingController::class, 'cancel'])->name('public.bookings.cancel'); });
 // ================== Admin Routes ================== //
-Route::middleware(['auth', IsAdmin::class])->prefix('admin')->group(function () {
+Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->group(function () {
+    // ✅ Dashboard
+    Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
 
+    // ✅ Hotels CRUD
+    Route::resource('hotels', AdminHotelController::class);
 
-    // Rooms CRUD
-    Route::get('/rooms', [RoomController::class, 'index'])->name('admin.rooms.index');
-    Route::get('/rooms/create', [RoomController::class, 'create'])->name('admin.rooms.create');
-    
-    Route::post('/rooms', [RoomController::class, 'show'])->name('admin.rooms.show');
-    Route::get('/rooms/{id}/edit', [RoomController::class, 'edit'])->name('admin.rooms.edit');
-    Route::put('/rooms/{id}', [RoomController::class, 'update'])->name('admin.rooms.update');
-    Route::delete('/rooms/{id}', [RoomController::class, 'destroy'])->name('admin.rooms.destroy');
-    
-        Route::get('/bookings', [BookingController::class, 'index'])->name('admin.bookings.index');
-    Route::get('/bookings/{id}', [BookingController::class, 'show'])->name('admin.bookings.show');
-    Route::delete('/bookings/{id}', [BookingController::class, 'destroy'])->name('admin.bookings.destroy');
+    // ✅ Rooms CRUD
+    Route::resource('rooms', AdminRoomController::class);
 
-    
-    Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+    // ✅ Bookings (index, show, destroy only)
+    Route::resource('bookings', AdminBookingController::class)->only(['index', 'show', 'destroy']);
 });
 
+Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () {
 
-
-
-
-
-<<<<<<< HEAD
-
-
-
-// Authenticated user routes
-//Route::middleware(['auth', 'role:user'])->group(function () {
-   // Route::get('/', [UserController::class, 'index'])->name('home');
-//});
-
-Route::post('/rooms', [RoomController::class, 'store'])->name('admin.rooms.store');
-=======
+    Route::delete('/bookings/{id}/cancel', [AdminBookingController::class, 'cancel'])->name('admin.bookings.cancel');
 });
-Route::middleware(['auth'])->group(function () {
-
-    Route::get('/mybookings', [BookingController::class, 'myBookings'])->name('bookings.all');
-
-});
-
-Route::get('/hotels', [HotelController::class, 'index'])->name('admin.hotels.index');
-Route::get('/rooms', [RoomController::class, 'index'])->name('admin.rooms.index');
-
-    Route::get('/hotels/create', [HotelController::class, 'create'])->name('admin.hotels.create');
-    Route::get('/rooms/create', [RoomController::class, 'create'])->name('admin.rooms.create');
-    Route::get('/hotels', [HotelController::class, 'index'])->name('hotels.index');
-        Route::post('/rooms', [RoomController::class, 'store'])->name('admin.rooms.store');
->>>>>>> 7394923c4fd241450bdd021b61ee9140df668fc8
-
-
-        
-
-<<<<<<< HEAD
-
-Route::prefix('admin')->name('admin.')->group(function () {
-    Route::resource('hotels', HotelController::class);
-});
-
-
-
-
-
-
-
-
-
-
-
-=======
-        
->>>>>>> 7394923c4fd241450bdd021b61ee9140df668fc8

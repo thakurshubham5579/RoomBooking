@@ -13,7 +13,7 @@ class HotelController extends Controller
         return view('public.hotels.index', compact('hotels'));
     }
 
-   // app/Http/Controllers/HotelController.php
+
 public function show($id)
 {
     $hotels = Hotel::with('rooms')->findOrFail($id);

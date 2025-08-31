@@ -24,10 +24,18 @@
                 class="w-full border rounded p-2" required>
         </div>
 
-        <div class="mb-4">
-            <label class="block font-semibold mb-1">Type</label>
-            <input type="text" name="type" value="{{ old('type', $room->type) }}" 
-                class="w-full border rounded p-2" required>
+         <div class="mb-4">
+            <label class="block font-semibold mb-2">Type</label>
+            <select name="type" class="w-full border rounded px-3 py-2">
+                <option value="Single" {{ old('type') == 'Single' ? 'selected' : '' }}>Single</option>
+                <option value="Double" {{ old('type') == 'Double' ? 'selected' : '' }}>Double</option>
+                <option value="Suite" {{ old('type') == 'Suite' ? 'selected' : '' }}>Suite</option>
+                <option value="Deluxe" {{ old('type') == 'Deluxe' ? 'selected' : '' }}>Deluxe</option>
+                <option value="Family" {{ old('type') == 'Family' ? 'selected' : '' }}>Family</option>
+            </select>
+            @error('type') 
+                <p class="text-red-500 text-sm">{{ $message }}</p>
+            @enderror
         </div>
 
         <div class="mb-4">

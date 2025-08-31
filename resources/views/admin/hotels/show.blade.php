@@ -1,3 +1,5 @@
+
+
 @extends('layouts.admin')
 
 @section('content')
@@ -73,13 +75,6 @@
     @endif
 </div>
 
-<script>
-    function toggleSection(id) {
-        const el = document.getElementById(id);
-        el.classList.toggle('hidden');
-    }
-</script>
+
 @endsection
-
-
 

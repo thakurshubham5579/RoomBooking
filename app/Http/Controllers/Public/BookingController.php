@@ -3,14 +3,16 @@
 namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Booking;
 use App\Models\Room;
+use App\Models\Booking;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class BookingController extends Controller
 {
-    // Show user’s bookings
+    /**
+     * Show all bookings for the logged-in user
+     */
     public function myBookings()
     {
         $bookings = Booking::with('room.hotel')
@@ -21,51 +23,54 @@ class BookingController extends Controller
         return view('public.bookings.my_bookings', compact('bookings'));
     }
 
-    // Book a room
-    public function book(Request $request, Room $room)
-    {
-        if ($room->status === 'booked') {
-            return back()->with('error', 'Room is already booked.');
-        }
-
-        $request->validate([
-            'check_in' => 'required|date',
-            'check_out' => 'required|date|after:check_in',
-            'guests' => 'required|integer|min:1',
-        ]);
-
-        // Mark room as booked
-        $room->status = 'booked';
-        $room->save();
-
-        // Create booking
-        Booking::create([
-            'user_id'   => Auth::id(),
-            'room_id'   => $room->id,
-            'check_in'  => $request->check_in,
-            'check_out' => $request->check_out,
-            'guests'    => $request->guests,
-            'status'    => 'booked',
-        ]);
-
-        return redirect()->route('public.booking.my')
-            ->with('success', 'Room booked successfully!');
+public function bookRoom($roomId)
+{
+    if (!Auth::check()) {
+        return redirect()->route('login')->with('error', 'Please login to book a room.');
     }
 
-    // Cancel booking by user
-    public function cancel(Booking $booking)
-    {
-        if ($booking->user_id !== Auth::id()) {
-            abort(403, 'Unauthorized action.');
-        }
+    $room = Room::findOrFail($roomId);
 
+    if ($room->status !== 'available') {
+        return redirect()->back()->with('error', 'Room is not available for booking.');
+    }
+
+    $booking = new Booking();
+    $booking->user_id = Auth::id();
+    $booking->room_id = $room->id;
+    $booking->status = 'confirmed';
+    $booking->check_in = now();
+    $booking->check_out = now()->addDays(1);
+    $booking->save();
+
+    $room->update(['status' => 'booked']);
+
+    return redirect()->route('public.bookings.my_bookings')
+                     ->with('success', 'Room booked successfully!');
+}
+
+    /**
+     * Cancel a booking
+     */
+   public function cancel($id)
+{
+    $booking = Booking::where('id', $id)
+        ->where('user_id', Auth::id()) // ✅ only cancel own booking
+        ->firstOrFail();
+
+    // Update booking status
+    if ($booking->status !== 'cancelled') {
         $booking->status = 'cancelled';
         $booking->save();
 
-        // Free the room again
-        $booking->room->status = 'available';
-        $booking->room->save();
-
-        return back()->with('success', 'Booking cancelled.');
+        // Set room back to available
+        if ($booking->room) {
+            $booking->room->update(['status' => 'available']);
+        }
     }
+
+    return redirect()->route('public.bookings.my_bookings')
+                     ->with('success', 'Booking cancelled. Room is now available again.');
+}
+
 }

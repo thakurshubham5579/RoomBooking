@@ -11,7 +11,7 @@
         <a href="{{ route('public.hotels.index') }}" class="font-bold">Hotel Booking</a>
         <div>
             @auth
-                <a href="{{ route('public.booking.my_bookings') }}" class="mr-4">My Bookings</a>
+                <a href="{{ route('public.bookings.my_bookings') }}" class="mr-4">My Bookings</a>
                 <form action="{{ route('logout') }}" method="POST" class="inline">
                     @csrf
                     <button type="submit">Logout</button>
