@@ -17,6 +17,13 @@ class AuthController extends Controller
     public function login(Request $request)
     {
       $credentials = $request->only('email', 'password');
+      
+        $user = User::where('email', $request->email)->first();
+
+    if (!$user) {
+        // Email not found
+        return back()->with('error', 'This email is not registered.');
+    }
 
     if (Auth::attempt($credentials)) {
         $user = Auth::user();
@@ -28,7 +35,7 @@ class AuthController extends Controller
         return redirect()->route('home');
     }
 
-    return back()->withErrors(['email' => 'Invalid credentials'])->withInput();
+    return back()->withErrors( 'Incorrect password. Please try again.')->withInput();
     }
 
       public function registerForm()
@@ -41,7 +48,7 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:6|confirmed',
+            'password' => 'required|string|min:6|confirmed',
         ]);
 
         $user = User::create([
@@ -54,7 +61,7 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect('home');
+        return redirect()->route('home')->with('success', 'Registration successful!');
     }
 
       public function logout(Request $request)

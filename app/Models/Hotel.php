@@ -20,6 +20,10 @@ class Hotel extends Model
     {
         return $this->hasMany(Room::class);
     }
+public function owners()
+{
+    return $this->belongsToMany(User::class, 'hotel_owner', 'hotel_id', 'user_id');
+}
 
     
 }

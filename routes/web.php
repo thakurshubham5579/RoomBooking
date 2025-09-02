@@ -59,3 +59,52 @@ Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () 
 
     Route::delete('/bookings/{id}/cancel', [AdminBookingController::class, 'cancel'])->name('admin.bookings.cancel');
 });
+
+
+use App\Http\Controllers\Owner\OwnerHotelController;
+
+Route::middleware(['auth'])->prefix('owner')->name('owner.')->group(function () {
+    Route::resource('hotels', OwnerHotelController::class);
+});
+
+
+
+
+use App\Http\Controllers\Owner\OwnerHomeController;
+
+Route::prefix('owner')->middleware(['auth'])->group(function () {
+    Route::get('home', [OwnerHomeController::class, 'index'])->name('owner.home');
+});
+
+use App\Http\Controllers\Owner\OwnerBookingController;
+
+Route::prefix('owner')->name('owner.')->middleware(['auth'])->group(function () {
+    Route::resource('bookings', OwnerBookingController::class);
+});
+
+
+Route::prefix('owner')->name('owner.')->middleware(['auth'])->group(function () {
+    Route::resource('hotels', OwnerHotelController::class);
+   
+    Route::resource('bookings', OwnerBookingController::class)->only(['index', 'show']);
+});
+
+
+
+use App\Http\Controllers\Owner\OwnerRoomController;
+
+
+
+Route::prefix('owner')->name('owner.')->middleware(['auth'])->group(function () {
+    Route::get('hotels/{hotel}/rooms', [OwnerRoomController::class, 'index'])->name('rooms.index');
+    Route::get('hotels/{hotel}/rooms/create', [OwnerRoomController::class, 'create'])->name('rooms.create');
+    Route::post('hotels/rooms', [OwnerRoomController::class, 'store'])->name('rooms.store');
+
+     Route::get('hotels/{hotel}/rooms/{room}/edit', [OwnerRoomController::class, 'edit'])->name('rooms.edit');
+    Route::put('hotels/{hotel}/rooms/{room}', [OwnerRoomController::class, 'update'])->name('rooms.update');
+    Route::delete('hotels/{hotel}/rooms/{room}', [OwnerRoomController::class, 'destroy'])->name('rooms.destroy');
+
+    
+});
+
+Route::post('hotels/{hotel}/rooms', [OwnerRoomController::class, 'store'])->name('rooms.store');

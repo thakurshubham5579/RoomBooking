@@ -57,4 +57,10 @@ class User extends Authenticatable
     {
         return $this->role === 'admin';
     }
+
+    public function hotels()
+{
+    return $this->belongsToMany(Hotel::class, 'hotel_owner', 'user_id', 'hotel_id');
+}
+
 }
