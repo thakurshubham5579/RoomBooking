@@ -75,7 +75,7 @@ class OwnerHomeController extends Controller
             ->latest()
             ->paginate(10);
 
-        return view('owner.rooms.index', compact('rooms'));
+        return view('owner.hotels.rooms.index', compact('rooms'));
     }
 
     /**

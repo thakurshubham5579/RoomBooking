@@ -1,4 +1,4 @@
-@extends('layouts.app') {{-- Use your owner layout --}}
+@extends('layouts.owner') {{-- Use your owner layout --}}
 
 @section('content')
 <div class="container mx-auto p-6">
@@ -20,7 +20,7 @@
             <p class="text-gray-600 text-lg">Total: {{ $roomsCount }}</p>
             {{-- Needs hotel id for rooms --}}
             @if($hotelsCount > 0)
-                <a href="{{ route('owner.rooms.index', $hotel->id ?? $hotels->first()->id) }}" 
+                <a href="{{ route('owner.hotels.rooms.index', $hotel->id ?? $hotels->first()->id) }}" 
                    class="mt-3 inline-block bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
                     Manage Rooms
                 </a>
@@ -48,7 +48,7 @@
                 + Add Hotel
             </a>
             @if($hotelsCount > 0)
-                <a href="{{ route('owner.rooms.create', $hotel->id ?? $hotels->first()->id) }}" 
+                <a href="{{ route('owner.hotels.rooms.create', $hotel->id ?? $hotels->first()->id) }}" 
                    class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
                     + Add Room
                 </a>

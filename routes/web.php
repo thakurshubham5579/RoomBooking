@@ -96,15 +96,50 @@ use App\Http\Controllers\Owner\OwnerRoomController;
 
 
 Route::prefix('owner')->name('owner.')->middleware(['auth'])->group(function () {
-    Route::get('hotels/{hotel}/rooms', [OwnerRoomController::class, 'index'])->name('rooms.index');
-    Route::get('hotels/{hotel}/rooms/create', [OwnerRoomController::class, 'create'])->name('rooms.create');
-    Route::post('hotels/rooms', [OwnerRoomController::class, 'store'])->name('rooms.store');
-
-     Route::get('hotels/{hotel}/rooms/{room}/edit', [OwnerRoomController::class, 'edit'])->name('rooms.edit');
-    Route::put('hotels/{hotel}/rooms/{room}', [OwnerRoomController::class, 'update'])->name('rooms.update');
-    Route::delete('hotels/{hotel}/rooms/{room}', [OwnerRoomController::class, 'destroy'])->name('rooms.destroy');
-
+   
     
 });
 
 Route::post('hotels/{hotel}/rooms', [OwnerRoomController::class, 'store'])->name('rooms.store');
+
+
+use App\Http\Controllers\Public\PublicRoomController;
+use App\Http\Middleware\IsOwner;
+
+Route::prefix('public')->name('public.')->group(function () {
+    // Room details page
+    Route::get('/hotels/{hotel}/rooms/{room}', [PublicRoomController::class, 'index'])
+        ->name('rooms.index');
+});
+
+
+Route::prefix('owner')->name('owner.')->group(function () {
+    Route::resource('hotels.rooms', App\Http\Controllers\Owner\OwnerRoomController::class);
+});
+
+
+
+
+    use App\Http\Controllers\Owner\DashboardController;
+
+Route::prefix('owner')
+    ->name('owner.')
+    ->middleware(['auth', IsOwner::class])
+    ->group(function () {
+        Route::get('/dashboard', [OwnerHomeController::class, 'index'])->name('dashboard');
+
+         Route::resource('hotels', OwnerHotelController::class);
+
+    // Nested Rooms under Hotels
+    Route::resource('hotels.rooms', OwnerRoomController::class);
+     Route::get('hotels/{hotel}/rooms', [OwnerRoomController::class, 'index'])->name('rooms.index');
+    Route::get('hotels/{hotel}/rooms/create', [OwnerRoomController::class, 'create'])->name('rooms.create');
+    Route::post('hotels/rooms', [OwnerRoomController::class, 'store'])->name('rooms.store');
+    Route::get('hotels/{hotel}/rooms/{room}', [OwnerRoomController::class, 'show'])->name('rooms.show'); 
+    
+
+     Route::get('hotels/{hotel}/rooms/{room}/edit', [OwnerRoomController::class, 'edit'])->name('owner.hotels.rooms.edit');
+    Route::put('hotels/{hotel}/rooms/{room}', [OwnerRoomController::class, 'update'])->name('owner.hotels.rooms.update');
+    Route::delete('hotels/{hotel}/rooms/{room}', [OwnerRoomController::class, 'destroy'])->name('owner.hotels.rooms.destroy');
+
+    });

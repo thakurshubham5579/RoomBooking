@@ -59,3 +59,4 @@ class RoomController extends Controller
         return redirect()->route('admin.rooms.index')->with('success', 'Room deleted successfully');
     }
 }
+  

@@ -1,8 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.owner')
 
 @section('content')
 <div class="p-6">
-    <h1 class="text-2xl font-bold mb-4">All Bookings (Admin)</h1>
+    <h1 class="text-2xl font-bold mb-4">All Bookings</h1>
 
     @if(session('success'))
         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">

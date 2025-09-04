@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.owner')
 
 @section('content')
 <div class="p-6">
@@ -6,7 +6,7 @@
         <h1 class="text-2xl font-bold">Rooms</h1>
         
         {{-- ✅ Pass hotel ID for nested route --}}
-        <a href="{{ route('owner.rooms.create', $hotel->id) }}" 
+        <a href="{{ route('owner.hotels.rooms.create', $hotel->id) }}" 
            class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
            + Add Room
         </a>
@@ -42,14 +42,23 @@
                     </div>
                 @endif
 
+                
+
                 <div class="mt-4 flex space-x-2">
+
+                {{-- ✅ View Details --}}
+                <a href="{{ route('owner.hotels.rooms.show', [$hotel->id, $room->id]) }}"
+                   class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">
+                   View
+                </a>
+
                     {{-- ✅ Edit requires both hotel + room --}}
-                    <a href="{{ route('owner.rooms.edit', [$hotel->id, $room->id]) }}" 
+                    <a href="{{ route('owner.hotels.rooms.edit', [$hotel->id, $room->id]) }}" 
                        class="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600">
                        Edit
                     </a>
 
-                    <form action="{{ route('owner.rooms.destroy', [$hotel->id, $room->id]) }}" method="POST" 
+                    <form action="{{ route('owner.hotels.rooms.destroy', [$hotel->id, $room->id]) }}" method="POST" 
                           onsubmit="return confirm('Are you sure you want to delete this room?');">
                         @csrf
                         @method('DELETE')

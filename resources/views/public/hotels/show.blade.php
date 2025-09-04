@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @section('content')
@@ -22,23 +23,14 @@
                         </span>
                     </p>
 
-                    @if($room->status === 'available')
-                        <form action="{{ route('public.bookings.book_room', $room->id) }}" method="POST">
-                            @csrf
-                            <button type="submit" 
-                                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-                                Book Now
-                            </button>
-                        </form>
-                    @else
-                        <button class="bg-gray-400 text-white px-4 py-2 rounded-lg cursor-not-allowed" disabled>
-                            Already Booked
-                        </button>
-                    @endif
+                    {{-- View Details Button --}}
+                    <a href="{{ route('public.rooms.index', [$hotels->id, $room->id]) }}"
+                       class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 inline-block">
+                        View Details
+                    </a>
                 </div>
             @endforeach
         </div>
     @endif
 </div>
 @endsection
-

@@ -30,4 +30,5 @@ class RoomRequest extends FormRequest
             'description' => 'nullable|string',
         ];
     }
+    
 }

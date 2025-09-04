@@ -28,12 +28,16 @@ class AuthController extends Controller
     if (Auth::attempt($credentials)) {
         $user = Auth::user();
 
+        // Redirect based on role
         if ($user->role === 'admin') {
             return redirect()->route('admin.dashboard');
+        } elseif ($user->role === 'owner') {
+            return redirect()->route('owner.dashboard');
+        } else {
+            return redirect()->route('home');
         }
-
-        return redirect()->route('home');
     }
+
 
     return back()->withErrors( 'Incorrect password. Please try again.')->withInput();
     }

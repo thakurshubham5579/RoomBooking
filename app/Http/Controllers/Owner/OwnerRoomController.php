@@ -19,7 +19,7 @@ class OwnerRoomController extends Controller
 
         $rooms = $hotel->rooms;
 
-        return view('owner.rooms.index', compact('hotel', 'rooms'));
+        return view('owner.hotels.rooms.index', compact('hotel', 'rooms'));
     }
 
     public function create()
@@ -29,7 +29,7 @@ class OwnerRoomController extends Controller
         $q->where('user_id', Auth::id());
     })->get();
 
-    return view('owner.rooms.create', compact('hotels'));
+    return view('owner.hotels.rooms.create', compact('hotels'));
 }
 
 
@@ -49,7 +49,7 @@ public function store(Request $request)
 
     $hotel->rooms()->create($request->only('room_number', 'type', 'price', 'status', 'description'));
 
-    return redirect()->route('owner.rooms.index', $hotel->id)->with('success', 'Room added successfully.');
+    return redirect()->route('owner.hotels.rooms.index', $hotel->id)->with('success', 'Room added successfully.');
 }
 
 
@@ -62,7 +62,7 @@ public function store(Request $request)
 
         $room = $hotel->rooms()->findOrFail($id);
 
-        return view('owner.rooms.show', compact('hotel', 'room'));
+        return view('owner.hotels.rooms.show', compact('hotel', 'room'));
     }
 
     public function edit($hotelId, $id)
@@ -73,22 +73,25 @@ public function store(Request $request)
 
         $room = $hotel->rooms()->findOrFail($id);
 
-        return view('owner.rooms.edit', compact('hotel', 'room'));
+        return view('owner.hotels.rooms.edit', compact('hotel', 'room'));
     }
 
-    public function update(RoomRequest $request, $hotelId, $id)
-    {
-        $hotel = Hotel::whereHas('owners', function ($q) {
-            $q->where('user_id', Auth::id());
-        })->findOrFail($hotelId);
+   public function update(Request $request, Hotel $hotel, Room $room)
+{
+    $validated = $request->validate([
+        'room_number' => 'required',
+        'type' => 'required',
+        'price' => 'required|numeric',
+        'status' => 'required',
+        'description' => 'nullable',
+    ]);
 
-        $room = $hotel->rooms()->findOrFail($id);
+    $room->update($validated);
 
-        $room->update($request->validated());
+    return redirect()->route('owner.hotels.rooms.index', $hotel->id)
+                     ->with('success', 'Room updated successfully!');
+}
 
-        return redirect()->route('owner.hotels.rooms.index', $hotel->id)
-                         ->with('success', 'Room updated successfully.');
-    }
 
     public function destroy($hotelId, $id)
     {
